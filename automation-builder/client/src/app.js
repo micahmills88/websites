@@ -38,9 +38,6 @@ class App extends React.Component {
           <Switch>
               <Route exact path='/' component={MainPage}/>
               <Route path='/projectpage/:project_id?' component={ProjectPage} />}/>
-              {/*In the future pass only the ID and have node query all the name info*/}
-              {/*<Route path='/personas' component={PersonaPage}/>
-              <Route path='/machines' component={MachinePage}/>*/}
           </Switch>
       </main>
       <Drawer open={this.state.left} onClose={this.toggleDrawer('left', false)}>

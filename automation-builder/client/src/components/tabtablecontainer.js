@@ -107,7 +107,8 @@ class TabTableContainer extends React.Component {
           },
           project: this.state.project_id,
           behaviors: 0,
-          xml:"%3Cxml%20xmlns=%22http://www.w3.org/1999/xhtml%22%3E%3Cblock%20type=%22automation_config%22%20x=%220%22%20y=%220%22%3E%3Cfield%20name=%22config_name%22%3ENew%20Config%3C/field%3E%3Cvalue%20name=%22virtual_machine%22%3E%3Cblock%20type=%22machine%22%3E%3Cfield%20name=%22vm_name%22%3EVM%20Name%3C/field%3E%3C/block%3E%3C/value%3E%3Cvalue%20name=%22user_account%22%3E%3Cblock%20type=%22persona%22%3E%3Cfield%20name=%22username%22%3EUser%3C/field%3E%3Cfield%20name=%22password%22%3Eabc123%3C/field%3E%3C/block%3E%3C/value%3E%3C/block%3E%3C/xml%3E",
+          json: "",
+          xml:"%3Cxml%20xmlns=%22http://www.w3.org/1999/xhtml%22%3E%3Cblock%20type=%22automation_config%22%20x=%220%22%20y=%220%22%3E%3Cfield%20name=%22config_name%22%3ENew%20Config%3C/field%3E%3Cfield%20name=%22vm_name%22%3Eworkstation.network.local%3C/field%3E%3Cfield%20name=%22user_name%22%3Eadministrator%3C/field%3E%3Cfield%20name=%22password%22%3Epassword%3C/field%3E%3C/block%3E%3C/xml%3E",
     }
 
     fetch('/api/post_new_config', { //post the new config to the database

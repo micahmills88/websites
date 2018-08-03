@@ -34,6 +34,7 @@ class BlocklyEditor extends React.Component {
         //also read the xml and save in the database
         var xml = Blockly.Xml.workspaceToDom(this.state.workspace, true);        
         var xml_text = encodeURI(Blockly.Xml.domToText(xml));
+        //console.log(xml_text);
 
         return {
             id: this.state.config_id,
@@ -52,27 +53,27 @@ class BlocklyEditor extends React.Component {
         var blocks = [
             
             //{ category: 'Config', items: ['automation_config'] },
-            { category: 'VM', items: ['machine'] },
-            { category: 'Account', items: ['persona'] },
             { category: 'Behaviors', 
                 items: [
-                    'behavior_browse_web', 
-                    'behavior_launch_program', 
-                    'behavior_webapp_webmail',
-                    'email_send_single'
+                    'behavior_execute_command', 
+                    'behavior_send_email', 
+                    'behavior_create_document'
                 ] 
             },
-            { category: 'Events',
+            { category: 'Reactive',
                 items: [
-                    'reactive_process_name',
-                    'reactive_process_diff',
-                    'reactive_process_module'
+                    'check_process_name',
+                    'check_process_module',
+                    'check_netstat_connection',
+                    'behavior_text_block',
+                    'behavior_variable_text'
                 ]
             },
-            {category: 'Variables',
+            {category: 'Controls',
                 items: [
-                    'text',
-                    'text_join'
+                    'control_sleep',
+                    'control_repeat_time',
+                    'control_repeat_random'
                 ]
             }
         ];
