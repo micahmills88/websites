@@ -25,15 +25,16 @@ Blockly.JavaScript['check_process_name'] = function(block) {
     var type_name = `"type":"processCheck"`;
     var text_process_name = `"process":"${block.getFieldValue('process_name')}"`;
     var text_variable = `"variable":"${block.getFieldValue('variable')}"`;
-    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim();
-    var behavior_array = statements_behaviors.slice(0,-1);
-    var behavior_dict = {};
-    behavior_array.map((value, index) => {
-        behavior_dict[index.toString()] = value;
-    });
-    var behavior_json = `"behaviors":{${behavior_dict}}`;
     
-    return `{${text_variable},${type_name},${text_process_name},${behavior_json}}`;
+    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim().slice(0,-4).split('####');
+    var behavior_dict = "";
+    statements_behaviors.forEach((value, index) => {
+        var temp = `"${index}":${value},`;
+        behavior_dict = behavior_dict.concat(temp);
+    });
+    var behavior_json = `"behavior_json":{${behavior_dict.slice(0,-1)}}`;
+    
+    return `{${text_variable},${type_name},${text_process_name},${behavior_json}}####`;
 };
 
 //===============================================================================================================================
@@ -65,15 +66,16 @@ Blockly.JavaScript['check_process_module'] = function(block) {
     var type_name = `"type":"processModuleCheck"`;
     var text_process_name = `"process":"${block.getFieldValue('process_name')}"`;
     var text_variable = `"variable":"${block.getFieldValue('variable')}"`;
-    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim();
-    var behavior_array = statements_behaviors.slice(0,-1);
-    var behavior_dict = {};
-    behavior_array.map((value, index) => {
-        behavior_dict[index.toString()] = value;
-    });
-    var behavior_json = `"behaviors":{${behavior_dict}}`;
     
-    return `{${text_variable},${type_name},${text_process_name},${text_module_name},${behavior_json}}`;
+    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim().slice(0,-4).split('####');
+    var behavior_dict = "";
+    statements_behaviors.forEach((value, index) => {
+        var temp = `"${index}":${value},`;
+        behavior_dict = behavior_dict.concat(temp);
+    });
+    var behavior_json = `"behavior_json":{${behavior_dict.slice(0,-1)}}`;
+    
+    return `{${text_variable},${type_name},${text_process_name},${text_module_name},${behavior_json}}####`;
 };
 
 //===============================================================================================================================
@@ -95,7 +97,7 @@ Blockly.JavaScript['control_sleep'] = function(block) {
     var number_time_value = `"value":"${block.getFieldValue('time_value')}"`;
     var dropdown_time_units = `"units":"${block.getFieldValue('time_units')}"`;
     var type_name = `"type":"controlSleep"`;
-    return `{${type_name},${dropdown_time_units},${number_time_value}`;
+    return `{${type_name},${dropdown_time_units},${number_time_value}}####`;
 };
 
 //===============================================================================================================================
@@ -121,15 +123,16 @@ Blockly.JavaScript['control_repeat_time'] = function(block) {
     var number_time_value = `"value":"${block.getFieldValue('time_value')}"`;
     var dropdown_time_units = `"units":"${block.getFieldValue('time_units')}"`;  
     var type_name = `"type":"controlRepeatTimer"`;
-    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim();
-    var behavior_array = statements_behaviors.slice(0,-1);
-    var behavior_dict = {};
-    behavior_array.map((value, index) => {
-        behavior_dict[index.toString()] = value;
+    
+    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim().slice(0,-4).split('####');
+    var behavior_dict = "";
+    statements_behaviors.forEach((value, index) => {
+        var temp = `"${index}":${value},`;
+        behavior_dict = behavior_dict.concat(temp);
     });
-    var behavior_json = `"behaviors":{${behavior_dict}}`;
+    var behavior_json = `"behavior_json":{${behavior_dict.slice(0,-1)}}`;
 
-    return `{${type_name},${dropdown_time_units},${number_time_value},${behavior_json}}`;
+    return `{${type_name},${dropdown_time_units},${number_time_value},${behavior_json}}####`;
 };
 
 //===============================================================================================================================
@@ -151,15 +154,16 @@ Blockly.Blocks['control_repeat_random'] = {
 
 Blockly.JavaScript['control_repeat_random'] = function(block) {  
     var type_name = `"type":"controlRepeatRandom"`;
-    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim();
-    var behavior_array = statements_behaviors.slice(0,-1);
-    var behavior_dict = {};
-    behavior_array.map((value, index) => {
-        behavior_dict[index.toString()] = value;
+    
+    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim().slice(0,-4).split('####');
+    var behavior_dict = "";
+    statements_behaviors.forEach((value, index) => {
+        var temp = `"${index}":${value},`;
+        behavior_dict = behavior_dict.concat(temp);
     });
-    var behavior_json = `"behaviors":{${behavior_dict}}`;
+    var behavior_json = `"behavior_json":{${behavior_dict.slice(0,-1)}}`;
 
-    return `{${type_name},${behavior_json}}`;
+    return `{${type_name},${behavior_json}}####`;
 };
 
 //===============================================================================================================================
@@ -183,7 +187,7 @@ Blockly.JavaScript['behavior_execute_command'] = function(block) {
     var type_name = `"type":"execCommand"`;
     var text_command = `"command":"${block.getFieldValue('command')}"`;
     var dropdown_shell = `"shell":"${block.getFieldValue('shell')}"`;
-    return `{${type_name},${dropdown_shell},${text_command}}`;
+    return `{${type_name},${dropdown_shell},${text_command}}####`;
 };
 
 //===============================================================================================================================
@@ -226,9 +230,9 @@ Blockly.JavaScript['behavior_send_email'] = function(block) {
     var text_site_password = `"sPassword":"${block.getFieldValue('site_password')}"`;
     var text_email_to = `"sEmailTo":"${block.getFieldValue('email_to')}"`;
     var text_email_subject = `"sSubject":"${block.getFieldValue('email_subject')}"`;
-    var statements_body = `"sBody": ${Blockly.JavaScript.statementToCode(block, 'body')}`; //may need to add newline chars
+    var statements_body = `"sBody":"${Blockly.JavaScript.statementToCode(block, 'body')}"`; //may need to add newline chars
     
-    return `{${type_name},${text_site_url},${text_site_username},${text_site_password},${text_email_to},${text_email_subject},${statements_body}}`;
+    return `{${type_name},${text_site_url},${text_site_username},${text_site_password},${text_email_to},${text_email_subject},${statements_body}}####`;
 };
 
 //===============================================================================================================================
@@ -261,7 +265,7 @@ Blockly.JavaScript['behavior_create_document'] = function(block) {
     var text_file_path = `"savePath":"${block.getFieldValue('file_path')}"`;
     var statements_text = `"text":"${Blockly.JavaScript.statementToCode(block, 'text')}"`;
     
-    return `{${type_name},${mode_name},${text_editor_path},${text_file_path},${statements_text}}`;
+    return `{${type_name},${mode_name},${text_editor_path},${text_file_path},${statements_text}}####`;
 };
 
 //===============================================================================================================================
@@ -344,15 +348,16 @@ Blockly.JavaScript['check_netstat_connection'] = function(block) {
     var number_remote_port = `"remotePort":"${block.getFieldValue('remote_port')}"`;
     var protocol_state = `"STATE":"ESTABLISHED"`;
     var text_variable = block.getFieldValue('variable');
-    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim();
-    var behavior_array = statements_behaviors.slice(0,-1);
-    var behavior_dict = {};
-    behavior_array.map((value, index) => {
-        behavior_dict[index.toString()] = value;
-    });
-    var behavior_json = `"behaviors":{${behavior_dict}}`;
     
-    return `{${text_variable},${type_name},${protocol_type},${text_local_ip},${number_local_port},${text_remote_ip},${number_remote_port},${protocol_state},${behavior_json}}`;
+    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim().slice(0,-4).split('####');
+    var behavior_dict = "";
+    statements_behaviors.forEach((value, index) => {
+        var temp = `"${index}":${value},`;
+        behavior_dict = behavior_dict.concat(temp);
+    });
+    var behavior_json = `"behavior_json":{${behavior_dict.slice(0,-1)}}`;
+    
+    return `{${text_variable},${type_name},${protocol_type},${text_local_ip},${number_local_port},${text_remote_ip},${number_remote_port},${protocol_state},${behavior_json}}####`;
 };
 
 //===============================================================================================================================
@@ -386,19 +391,21 @@ Blockly.Blocks['automation_config'] = {
 
 Blockly.JavaScript['automation_config'] = function(block) {
     var name_var = `"name":"${block.getFieldValue('config_name')}"`;
-    var machine_var = `"machine":${block.getFieldValue('vm_name')}`;
+    var machine_var = `"machine":"${block.getFieldValue('vm_name')}"`;
     var account_var = `"account":{"user":"${block.getFieldValue('user_name')}","password":"${block.getFieldValue('password')}"}`;
     var behaviors_count = `"behaviors":${block.getChildren().length}`
 
-    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim();
-    var behavior_array = statements_behaviors.slice(0,-1);
-    var behavior_dict = {};
-    behavior_array.map((value, index) => {
-        behavior_dict[index.toString()] = value;
+    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim().slice(0,-4).split('####');
+    var behavior_dict = "";
+    statements_behaviors.forEach((value, index) => {
+        var temp = `"${index}":${value},`;
+        behavior_dict = behavior_dict.concat(temp);
     });
-    var behavior_json = `"behavior_json":{${behavior_dict}}`;
+    var behavior_json = `"behavior_json":{${behavior_dict.slice(0,-1)}}`;
 
-    return `{${name_var},${machine_var},${account_var},${behaviors_count},${behavior_json}}`;
+    var code = `{${name_var},${machine_var},${account_var},${behaviors_count},${behavior_json}}`; 
+    console.log(code);
+    return code;
 };
 
 //===============================================================================================================================
