@@ -159,16 +159,16 @@ router.get('/config/:project/:vm', (req,res) => {
       if(projects.length < 1) return res.json({ success: false, error: "no results" });
       AutomationConfig.find({project: projects[0]._id}, (err, configs) => {
         if(err) return res.json({ success: false, error: err});
-        
+
         // here we process the xml into a usable format
-        let configs_xml = [];
+        let configs_json = [];
         configs.forEach(config => {
-          configs_xml.push(decodeURI(config.xml));
+          configs_json.push(config.json);
         });
         
         return res.json({ 
           success: true, 
-          data: configs_xml 
+          data: JSON.parse(configs_json)
       });
       })
   });

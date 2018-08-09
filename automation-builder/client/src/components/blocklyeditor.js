@@ -29,7 +29,9 @@ class BlocklyEditor extends React.Component {
     getUpdatedConfig = () => {
         //here we read the workspace and build a new automation config json for the database
         var code = Blockly.JavaScript.workspaceToCode(this.state.workspace);
+        console.log(code);
         var json = JSON.parse(code);
+        
 
         //also read the xml and save in the database
         var xml = Blockly.Xml.workspaceToDom(this.state.workspace, true);        
@@ -41,9 +43,9 @@ class BlocklyEditor extends React.Component {
             name: json.name,
             machine: json.machine,
             account: json.account,
-            behaviors: json.behaviors,
+            behaviors: json.behaviors_count,
             project: this.state.project_id,
-            json: encodeURI(json.behavior_json.toString()),
+            json: code,
             xml: xml_text,
         };
     };

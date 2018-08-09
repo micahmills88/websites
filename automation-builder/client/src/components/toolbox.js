@@ -25,14 +25,7 @@ Blockly.JavaScript['check_process_name'] = function(block) {
     var type_name = `"type":"processCheck"`;
     var text_process_name = `"process":"${block.getFieldValue('process_name')}"`;
     var text_variable = `"variable":"${block.getFieldValue('variable')}"`;
-    
-    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim().slice(0,-4).split('####');
-    var behavior_dict = "";
-    statements_behaviors.forEach((value, index) => {
-        var temp = `"${index}":${value},`;
-        behavior_dict = behavior_dict.concat(temp);
-    });
-    var behavior_json = `"behavior_json":{${behavior_dict.slice(0,-1)}}`;
+    var behavior_json = parseBehaviorStatements(block);
     
     return `{${text_variable},${type_name},${text_process_name},${behavior_json}}####`;
 };
@@ -66,14 +59,7 @@ Blockly.JavaScript['check_process_module'] = function(block) {
     var type_name = `"type":"processModuleCheck"`;
     var text_process_name = `"process":"${block.getFieldValue('process_name')}"`;
     var text_variable = `"variable":"${block.getFieldValue('variable')}"`;
-    
-    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim().slice(0,-4).split('####');
-    var behavior_dict = "";
-    statements_behaviors.forEach((value, index) => {
-        var temp = `"${index}":${value},`;
-        behavior_dict = behavior_dict.concat(temp);
-    });
-    var behavior_json = `"behavior_json":{${behavior_dict.slice(0,-1)}}`;
+    var behavior_json = parseBehaviorStatements(block);
     
     return `{${text_variable},${type_name},${text_process_name},${text_module_name},${behavior_json}}####`;
 };
@@ -123,14 +109,7 @@ Blockly.JavaScript['control_repeat_time'] = function(block) {
     var number_time_value = `"value":"${block.getFieldValue('time_value')}"`;
     var dropdown_time_units = `"units":"${block.getFieldValue('time_units')}"`;  
     var type_name = `"type":"controlRepeatTimer"`;
-    
-    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim().slice(0,-4).split('####');
-    var behavior_dict = "";
-    statements_behaviors.forEach((value, index) => {
-        var temp = `"${index}":${value},`;
-        behavior_dict = behavior_dict.concat(temp);
-    });
-    var behavior_json = `"behavior_json":{${behavior_dict.slice(0,-1)}}`;
+    var behavior_json = parseBehaviorStatements(block);
 
     return `{${type_name},${dropdown_time_units},${number_time_value},${behavior_json}}####`;
 };
@@ -154,14 +133,7 @@ Blockly.Blocks['control_repeat_random'] = {
 
 Blockly.JavaScript['control_repeat_random'] = function(block) {  
     var type_name = `"type":"controlRepeatRandom"`;
-    
-    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim().slice(0,-4).split('####');
-    var behavior_dict = "";
-    statements_behaviors.forEach((value, index) => {
-        var temp = `"${index}":${value},`;
-        behavior_dict = behavior_dict.concat(temp);
-    });
-    var behavior_json = `"behavior_json":{${behavior_dict.slice(0,-1)}}`;
+    var behavior_json = parseBehaviorStatements(block);
 
     return `{${type_name},${behavior_json}}####`;
 };
@@ -348,14 +320,7 @@ Blockly.JavaScript['check_netstat_connection'] = function(block) {
     var number_remote_port = `"remotePort":"${block.getFieldValue('remote_port')}"`;
     var protocol_state = `"STATE":"ESTABLISHED"`;
     var text_variable = block.getFieldValue('variable');
-    
-    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim().slice(0,-4).split('####');
-    var behavior_dict = "";
-    statements_behaviors.forEach((value, index) => {
-        var temp = `"${index}":${value},`;
-        behavior_dict = behavior_dict.concat(temp);
-    });
-    var behavior_json = `"behavior_json":{${behavior_dict.slice(0,-1)}}`;
+    var behavior_json = parseBehaviorStatements(block);
     
     return `{${text_variable},${type_name},${protocol_type},${text_local_ip},${number_local_port},${text_remote_ip},${number_remote_port},${protocol_state},${behavior_json}}####`;
 };
@@ -393,22 +358,30 @@ Blockly.JavaScript['automation_config'] = function(block) {
     var name_var = `"name":"${block.getFieldValue('config_name')}"`;
     var machine_var = `"machine":"${block.getFieldValue('vm_name')}"`;
     var account_var = `"account":{"user":"${block.getFieldValue('user_name')}","password":"${block.getFieldValue('password')}"}`;
-    var behaviors_count = `"behaviors":${block.getChildren().length}`
-
-    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim().slice(0,-4).split('####');
-    var behavior_dict = "";
-    statements_behaviors.forEach((value, index) => {
-        var temp = `"${index}":${value},`;
-        behavior_dict = behavior_dict.concat(temp);
-    });
-    var behavior_json = `"behavior_json":{${behavior_dict.slice(0,-1)}}`;
+    var behaviors_count = `"behaviors_count":${block.getChildren().length}`
+    var behavior_json = parseBehaviorStatements(block);
 
     var code = `{${name_var},${machine_var},${account_var},${behaviors_count},${behavior_json}}`; 
-    console.log(code);
     return code;
 };
 
 //===============================================================================================================================
+
+const parseBehaviorStatements = (block) => {
+    var statements_behaviors = Blockly.JavaScript.statementToCode(block, 'behaviors').trim();
+    var behavior_dict = "";
+    if(statements_behaviors.length > 0)
+    {
+        statements_behaviors = statements_behaviors.slice(0,-4).split('####');
+        statements_behaviors.forEach((value, index) => {
+            var temp = `"${index}":${value},`;
+            behavior_dict = behavior_dict.concat(temp);
+        });
+    }
+    var behavior_json = `"behaviors":{${behavior_dict.slice(0,-1)}}`;
+    return behavior_json;
+};
+
 const ToolBox = (blocks) => {
     var categoryXML = blocks.map((block) => {
         var blockXML = block.items.map((item) => {
