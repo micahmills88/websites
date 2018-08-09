@@ -379,7 +379,8 @@ const parseBehaviorStatements = (block) => {
         });
     }
     var behavior_json = `"behaviors":{${behavior_dict.slice(0,-1)}}`;
-    return behavior_json;
+    var cleaned = String.raw`${behavior_json.split("\\").filter(Boolean).join("\\\\")}`;
+    return cleaned;
 };
 
 const ToolBox = (blocks) => {

@@ -29,7 +29,7 @@ class BlocklyEditor extends React.Component {
     getUpdatedConfig = () => {
         //here we read the workspace and build a new automation config json for the database
         var code = Blockly.JavaScript.workspaceToCode(this.state.workspace);
-        console.log(code);
+        //console.log(code);
         var json = JSON.parse(code);
         
 
