@@ -6,8 +6,10 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 
 import ButtonAppBar from './components/buttonappbar';
+import PrivateRoute from './components/privateroute';
 import MainPage from './pages/mainpage';
 import ProjectPage from './pages/projectpage';
+import LoginPage from './pages/loginpage';
 
 const buttonStyles = {
   button: {
@@ -36,8 +38,9 @@ class App extends React.Component {
         text="Automation Manager" onMenuClick={this.toggleDrawer('left', true)}/>
       <main>
           <Switch>
-              <Route exact path='/' component={MainPage}/>
-              <Route path='/projectpage/:project_id?' component={ProjectPage} />}/>
+              <PrivateRoute exact path='/' component={MainPage}/>
+              <PrivateRoute path='/projectpage/:project_id?' component={ProjectPage}/>
+              <Route path='/loginpage' component={LoginPage} />
           </Switch>
       </main>
       <Drawer open={this.state.left} onClose={this.toggleDrawer('left', false)}>

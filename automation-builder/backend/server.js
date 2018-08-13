@@ -4,14 +4,18 @@
 import express from 'express';
 import path from 'path';
 import bodyParser from 'body-parser';
+import cookieparser from 'cookie-parser';
+import session from 'express-session';
 import logger from 'morgan';
 import mongoose from 'mongoose';
 import Project from './models/project';
 import AutomationConfig from './models/automation_config';
+import passport from './passport';
 
 // and create our instances
 const app = express();
 const router = express.Router();
+const MongoStore = require('connect-mongo')(session);
 
 // set our port to either a predetermined port number if you have set it up, or 3001
 const API_PORT = process.env.API_PORT || 3001;
@@ -28,14 +32,40 @@ db.on('open', function(ref){
 //app.use(express.static(path.join(__dirname, '../client/build')));
 
 // now we should configure the API to use bodyParser and look for JSON data in the request body
-app.use(bodyParser.urlencoded({ extended: false }));
+var sessionOptions = {
+  secret: "zippidydodaday",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false },
+  store: new MongoStore({ mongooseConnection: mongoose.connection})
+};
+
+app.use(bodyParser());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieparser(sessionOptions.secret));
+app.use(session(sessionOptions));
+
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(logger('dev'));
 
 // now we can set the route path & initialize the API
 router.get('/', (req, res) => {
   res.json({ message: 'API test successful!' });
 });
+
+////////////////////////////// login to website //////////////////////////////
+router.post('/login', passport.authenticate('local'), (req, res) => {  
+  var userInfo = {
+    username: req.user.username
+  };
+  res.send(userInfo);
+});
+
+
+////////////////////////////// verify authentication //////////////////////////////
+
 
 
 ////////////////////////////// get all projects or post a new project //////////////////////////////
