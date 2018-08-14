@@ -35,7 +35,7 @@ class LoginPage extends React.Component {
         fetch('/api/login', { // login
             method: "POST",
             body: JSON.stringify({username: this.state.username, password: this.state.password}),
-            headers: {"Content-Type": "application/json"}
+            headers: {"Content-Type": "application/json"},
         })
         .then((res) => {
             this.props.onLogin(res.status === 200);

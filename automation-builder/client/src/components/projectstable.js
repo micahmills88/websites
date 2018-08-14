@@ -179,20 +179,20 @@ class ProjectsTable extends React.Component {
   }
 
   componentDidMount(){
-    fetch('/api/projects')
+    fetch('/api/projects', { credentials: 'same-origin' })
     .then(data => data.json())
     .then((res) => {
-        if(!res.success) this.setState({error: res.error});
-        else {
-          if(res.data.length > 0)
-          {
-            let newData = [];
-            res.data.forEach(element => {
-              newData.push(createData(element._id, element.name, element.description));
-            });
-            this.setState({ data: newData });
-          }
-        };
+      if(!res.success) this.setState({connectionError: res.error});
+      else {
+        if(res.data.length > 0)
+        {
+          let newData = [];
+          res.data.forEach(element => {
+            newData.push(createData(element._id, element.name, element.description));
+          });
+          this.setState({ data: newData });
+        }
+      };
     });    
   };
 

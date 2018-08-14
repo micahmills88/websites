@@ -36,7 +36,7 @@ var sessionOptions = {
   secret: "zippidydodaday",
   resave: true,
   saveUninitialized: true,
-  cookie: { secure: false, maxAge: 1000*15 }, //12 hour max age
+  cookie: { secure: false, maxAge: 1000*60*60*12 }, //12 hour max age
   store: new MongoStore({ mongooseConnection: mongoose.connection})
 };
 
@@ -62,25 +62,26 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
   res.send(userInfo);
 });
 
-
 ////////////////////////////// verify authentication //////////////////////////////
 router.get('/user', (req, res) => {
-  console.log('user ' + req.user);
-  if(req.user) res.json({ user: req.user });
-  else res.json({ user: null });
+  if(req.user) return res.json({ user: req.user });
+  else return res.json({ user: null });
 });
 
 
 ////////////////////////////// get all projects or post a new project //////////////////////////////
 router.get('/projects', (req,res) => {
+  if(req.user){
     Project.find((err, projects) => {
-        if(err) return res.json({ success: false, error: err});
-        if(projects.length < 1) return res.json({ success: false, error: "no results" });
-        return res.json({ 
-            success: true, 
-            data: projects 
-        });
+      if(err) return res.json({ success: false, error: err});
+      if(projects.length < 1) return res.json({ success: false, error: "no results" });
+      return res.json({ 
+        success: true, 
+        data: projects 
+      });
     });
+  }
+  else return res.json({ success: false, error: null});
 });
 
 router.post('/projects', (req, res) => {
