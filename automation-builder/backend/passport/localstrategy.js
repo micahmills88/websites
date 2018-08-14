@@ -8,8 +8,9 @@ const strategy = new LocalStrategy(
 	function(username, password, done) {
         console.log(username);
 		User.findOne({ user_name: username}, (err, res) => {
-			console.log("inside find");
-			console.log(res);
+			if(err) return done(err);
+			
+			//verify user via activedirectory
 			return done(null, res);
 		});
 	}

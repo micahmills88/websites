@@ -38,7 +38,6 @@ class LoginPage extends React.Component {
             headers: {"Content-Type": "application/json"}
         })
         .then((res) => {
-            console.log('login response', res);
             this.props.onLogin(res.status === 200);
         });
     };

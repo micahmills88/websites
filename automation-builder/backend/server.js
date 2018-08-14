@@ -34,13 +34,12 @@ db.on('open', function(ref){
 // now we should configure the API to use bodyParser and look for JSON data in the request body
 var sessionOptions = {
   secret: "zippidydodaday",
-  resave: false,
+  resave: true,
   saveUninitialized: true,
-  cookie: { secure: false },
+  cookie: { secure: false, maxAge: 1000*15 }, //12 hour max age
   store: new MongoStore({ mongooseConnection: mongoose.connection})
 };
 
-app.use(bodyParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieparser(sessionOptions.secret));
@@ -65,7 +64,11 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 
 ////////////////////////////// verify authentication //////////////////////////////
-
+router.get('/user', (req, res) => {
+  console.log('user ' + req.user);
+  if(req.user) res.json({ user: req.user });
+  else res.json({ user: null });
+});
 
 
 ////////////////////////////// get all projects or post a new project //////////////////////////////

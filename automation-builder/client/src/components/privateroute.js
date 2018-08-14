@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route} from 'react-router-dom';
 import LoginPage from '../pages/loginpage';
-
+import 'whatwg-fetch';
 
 class PrivateRoute extends React.Component {
 
@@ -12,6 +12,18 @@ class PrivateRoute extends React.Component {
     updateAuthenticated = (auth) =>
     {
         this.setState({authenticated: auth})
+    }
+
+    componentWillMount = () =>
+    {
+        fetch('/api/user', { // login
+            method: "GET",
+            headers: {"Content-Type": "application/json"},
+            credentials: 'same-origin'
+        })
+        .then((res) => {
+            this.updateAuthenticated(res.status === 200);
+        });
     }
     
     render() {
