@@ -85,104 +85,128 @@ router.get('/projects', (req,res) => {
 });
 
 router.post('/projects', (req, res) => {
-  const project = new Project();
-  const { name, description } = req.body;
-  if (!name || !description) {
-    return res.json({
-      success: false,
-      error: 'You must provide a name and description'
+  if(req.user){
+    console.log("create new project " + req.user);
+    const project = new Project();
+    const { name, description } = req.body;
+    if (!name || !description) {
+      return res.json({
+        success: false,
+        error: 'You must provide a name and description'
+      });
+    }
+    project.name = name;
+    project.description = description;
+    project.save((err, entry) => {
+      if (err) return res.json({ success: false, error: err });
+      return res.json({ success: true, newID: entry.id });
     });
   }
-  project.name = name;
-  project.description = description;
-  project.save((err, entry) => {
-    if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true, newID: entry.id });
-  });
+  else return res.json({ success: false, error: null});
 });
 
 ////////////////////////////// query info from a single project //////////////////////////////
 router.post('/projectid', (req, res) => {
-  const { id } = req.body;
-  Project.findById(id, (err, project) => {
-    if(err) return res.json({ success: false, error: err});
-    return res.json({ 
-        success: true, 
-        data: project
+  if(req.user){
+    console.log("query project " + req.user);
+    const { id } = req.body;
+    Project.findById(id, (err, project) => {
+      if(err) return res.json({ success: false, error: err});
+      return res.json({ 
+          success: true, 
+          data: project
+      });
     });
-  });
+  }
+  else return res.json({ success: false, error: null});
 });
 
 ////////////////////////////// query configs for a project //////////////////////////////
 router.post('/get_automation_configs', (req, res) => {
-  const { id } = req.body;
-  AutomationConfig.find({'project': id}, (err, configs) => {
-    if(err) return res.json({ success: false, error: err});
-    return res.json({
-      success: true,
-      data: configs
+  if(req.user){
+    console.log("query all configs " + req.user);
+    const { id } = req.body;
+    AutomationConfig.find({'project': id}, (err, configs) => {
+      if(err) return res.json({ success: false, error: err});
+      return res.json({
+        success: true,
+        data: configs
+      });
     });
-  });
+  }
+  else return res.json({ success: false, error: null});
 });
 
 ////////////////////////////// post config for a project //////////////////////////////
 router.post('/post_new_config', (req, res) => {
-  const config = new AutomationConfig();
-  const { name, machine, account, project, behaviors, json, xml } = req.body;
-  if (!name || !machine || !account || !project || !xml) {
-    return res.json({
-      success: false,
-      error: 'You must provide all the information'
+  if(req.user){
+    console.log("post new config " + req.user);
+    const config = new AutomationConfig();
+    const { name, machine, account, project, behaviors, json, xml } = req.body;
+    if (!name || !machine || !account || !project || !xml) {
+      return res.json({
+        success: false,
+        error: 'You must provide all the information'
+      });
+    }
+    config.name = name;
+    config.machine = machine;
+    config.account = account;
+    config.project = project;
+    config.behaviors = behaviors;
+    config.json = json;
+    config.xml = xml;
+    config.save((err, entry) => {
+      if (err) return res.json({ success: false, error: err });
+      return res.json({ success: true, newID: entry.id });
     });
   }
-  config.name = name;
-  config.machine = machine;
-  config.account = account;
-  config.project = project;
-  config.behaviors = behaviors;
-  config.json = json;
-  config.xml = xml;
-  config.save((err, entry) => {
-    if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true, newID: entry.id });
-  });
+  else return res.json({ success: false, error: null});
 });
 
 ////////////////////////////// query specific config //////////////////////////////
 router.post('/query_config', (req, res) => {
-  const { id } = req.body;
-  AutomationConfig.findById(id, (err, config) => {
-    if(err) return res.json({ success: false, error: err });
-      return res.json({
-        success: true,
-        data: config
-      });
-  });
+  if(req.user){
+    console.log("query specific config " + req.user);
+    const { id } = req.body;
+    AutomationConfig.findById(id, (err, config) => {
+      if(err) return res.json({ success: false, error: err });
+        return res.json({
+          success: true,
+          data: config
+        });
+    });
+  }
+  else return res.json({ success: false, error: null});
 });
 
 ////////////////////////////// update specific config //////////////////////////////
 router.post('/update_config', (req, res) => {
-  const { id, name, machine, account, project, behaviors, json, xml } = req.body;
-  AutomationConfig.findById(id, (err, config) => {
-    if (err) return res.json({ success: false, error: err });
-    if(config.xml != xml)
-    {
-      config.name = name;
-      config.machine = machine;
-      config.account = account;
-      config.behaviors = behaviors;
-      config.json = json
-      config.xml = xml;
-      config.save((err, entry) => {
-        if (err) return res.json({ success: false, error: err });
-        return res.json({ success: true, error: "update was successful"});
-      });
-    }
-    else
-    {
-      return res.json({ success: false, error: "no update needed" });
-    }
-  });
+  if(req.user){
+    console.log("update specific config " + req.user);
+    const { id, name, machine, account, project, behaviors, json, xml } = req.body;
+    AutomationConfig.findById(id, (err, config) => {
+      if (err) return res.json({ success: false, error: err });
+      if(config.xml != xml)
+      {
+        config.name = name;
+        config.machine = machine;
+        config.account = account;
+        config.behaviors = behaviors;
+        config.json = json
+        config.xml = xml;
+        config.save((err, entry) => {
+          if (err) return res.json({ success: false, error: err });
+          return res.json({ success: true, error: "update was successful"});
+        });
+      }
+      else
+      {
+        return res.json({ success: false, error: "no update needed" });
+      }
+    });
+  }
+  else return res.json({ success: false, error: null});
 });
 
 ////////////////////////////// query blocks for production //////////////////////////////

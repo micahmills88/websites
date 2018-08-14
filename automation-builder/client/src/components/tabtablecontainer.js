@@ -65,13 +65,11 @@ class TabTableContainer extends React.Component {
     fetch('/api/update_config', {
       method: "POST",
       body: JSON.stringify(postData),
-      headers: {
-      "Content-Type": "application/json"
-      }
+      headers: {"Content-Type": "application/json"},
+      credentials: 'same-origin'
     })
     .then(data => data.json())
     .then((res) => {
-      console.log(res);
       if(res.success)
       {
         const { rowData, configData } = this.state;
@@ -114,9 +112,8 @@ class TabTableContainer extends React.Component {
     fetch('/api/post_new_config', { //post the new config to the database
         method: "POST",
         body: JSON.stringify(postData),
-        headers: {
-        "Content-Type": "application/json"
-        }
+        headers: {"Content-Type": "application/json"},
+        credentials: 'same-origin'
       })
       .then(data => data.json())
       .then((res) => {
@@ -151,7 +148,8 @@ class TabTableContainer extends React.Component {
     fetch('/api/get_automation_configs', { //read all the configs for the project
       method: "POST",
       body: JSON.stringify({id: this.state.project_id}),
-      headers: {"Content-Type": "application/json"}
+      headers: {"Content-Type": "application/json"},
+      credentials: 'same-origin'
     })
     .then(data => data.json())
     .then((res) => {
