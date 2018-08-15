@@ -178,21 +178,29 @@ class ProjectsTable extends React.Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount= () => {
     fetch('/api/projects', { credentials: 'same-origin' })
-    .then(data => data.json())
     .then((res) => {
-      if(!res.success) this.setState({connectionError: res.error});
+      if(res.status === 200)
+      {
+        return res.json().then((json) => {
+          if(!json.success) this.setState({connectionError: json.error});
+          else {
+            if(json.data.length > 0)
+            {
+              let newData = [];
+              json.data.forEach(element => {
+                newData.push(createData(element._id, element.name, element.description));
+              });
+              this.setState({ data: newData });
+            }
+          };
+        });
+      }
       else {
-        if(res.data.length > 0)
-        {
-          let newData = [];
-          res.data.forEach(element => {
-            newData.push(createData(element._id, element.name, element.description));
-          });
-          this.setState({ data: newData });
-        }
-      };
+        //reset private route state
+        this.props.onAuthFail(false);
+      }
     });    
   };
 
@@ -228,13 +236,17 @@ class ProjectsTable extends React.Component {
           name: name,
           description: desc
         }),
-        headers: {
-        "Content-Type": "application/json"
-        }
+        headers: {"Content-Type": "application/json"}
       })
       .then(data => data.json())
       .then((res) => {
-        if(!res.success) this.setState({error: res.error});
+        if(!res.success) {
+          this.setState({error: res.error});
+        }
+        else if(res.status === 401)
+        {
+          console.log("Not Authorized");
+        }
         else {
           let newRow = createData(res.newID, name, desc);
           newData = newData.concat(data);

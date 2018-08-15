@@ -48,6 +48,7 @@ app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(logger('dev'));
+app.disable('etag');
 
 // now we can set the route path & initialize the API
 router.get('/', (req, res) => {
@@ -81,7 +82,7 @@ router.get('/projects', (req,res) => {
       });
     });
   }
-  else return res.json({ success: false, error: null});
+  else return res.status(401).json({ success: false, error: null});
 });
 
 router.post('/projects', (req, res) => {
@@ -212,28 +213,32 @@ router.post('/update_config', (req, res) => {
 ////////////////////////////// query blocks for production //////////////////////////////
 //project should be a vcenter folder, vm is the name of the vm template in vcenter
 router.get('/config/:project/:vm', (req,res) => {
-  Project.find({'name': req.params.project }, (err, projects) => {
-      if(err) return res.json({ success: false, error: err});
-      if(projects.length < 1) return res.json({ success: false, error: "no results" });
-      AutomationConfig.find({project: projects[0]._id}, (err, configs) => {
-        if(err) return res.json({ success: false, error: err});
+  const { project, vm } = req.params;
+  Project.findOne({'name': project }, (err, result) => {
+    if(err) return res.json({ success: false, error: err});
 
-        // here we process the xml into a usable format
-        let configs_json = [];
-        configs.forEach(config => {
-          configs_json.push(config.json);
-        });
-        
-        return res.json({ 
-          success: true, 
-          data: JSON.parse(configs_json)
+    if(result){
+      AutomationConfig.find({project: result._id, machine: vm}, (err, configs) => {
+        if(err) return res.json({ success: false, error: err});
+  
+        if(configs !== null && configs.length > 0){
+          // here we process the xml into a usable format
+          let configs_json = [];
+          configs.forEach(config => {
+            configs_json.push(config.json);
+          });
+          
+          return res.json({ 
+            success: true, 
+            data: JSON.parse(configs_json)
+          });
+        }
+        else return res.json({ success: false, error: "No configs found for VM"});
       });
-      })
+    }
+    else return res.json({ success: false, error: "No Project Found"});
   });
 });
-
-
-
 
 app.use('/api', router);
 app.listen(API_PORT, () => console.log(`Listening on port ${API_PORT}`));

@@ -25,7 +25,6 @@ class PrivateRoute extends React.Component {
         .then(data => data.json())
         .then((res) => {
             if(res.user){
-                console.log(res.user);
                 this.setState({ 
                     authenticated: true,
                     shouldRender: true
@@ -48,7 +47,7 @@ class PrivateRoute extends React.Component {
                 <Route {...rest} render={(props) => {
                     if(authenticated === true) {
                         return (
-                            <Component {...props} />
+                            <Component {...props} onAuthFail={this.updateAuthenticated} />
                         );
                     }
                     else {
