@@ -6,12 +6,12 @@ import { Typography } from '@material-ui/core';
 import TabTableContainer from '../components/tabtablecontainer';
 
 const gridstyle = {
-    minWidth: 400,
-    paddingLeft: 25,
-    paddingTop: 25,
-    paddingRight: 25,
-    paddingBottom: 25,
-  };
+        minWidth: 400,
+        paddingLeft: 25,
+        paddingTop: 25,
+        paddingRight: 25,
+        paddingBottom: 25,
+};
 
 class ProjectPage extends React.Component {
     constructor(props) {
@@ -23,12 +23,13 @@ class ProjectPage extends React.Component {
         }
     }
 
-    componentDidMount (){
+    componentWillMount (){
         //query project info
         fetch('/api/projectid', {
             method: "POST",
             body: JSON.stringify({id: this.state.project_id}),
-            headers: {"Content-Type": "application/json"}
+            headers: {"Content-Type": "application/json"},
+            credentials: 'same-origin'
         })
         .then(data => data.json())
         .then((res) => {
@@ -55,7 +56,7 @@ class ProjectPage extends React.Component {
                         </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <TabTableContainer project_id={this.state.project_id}/>
+                        <TabTableContainer project_id={this.state.project_id} onAuthFail={this.props.onAuthFail }/>
                     </Grid>
                 </Grid>
             </div>

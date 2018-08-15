@@ -135,7 +135,7 @@ router.post('/get_automation_configs', (req, res) => {
       });
     });
   }
-  else return res.json({ success: false, error: null});
+  else return res.status(401).json({ success: false, error: null});
 });
 
 ////////////////////////////// post config for a project //////////////////////////////
