@@ -22,12 +22,15 @@ Blockly.Blocks['check_process_name'] = {
 };
 
 Blockly.JavaScript['check_process_name'] = function(block) {
-    var type_name = `"type":"processCheck"`;
-    var text_process_name = `"process":"${block.getFieldValue('process_name')}"`;
+    var type_name = `"type":"reactive"`;
+    var monitor_name = `"monitor":"processCheck"`;
+    var mode_name = `"mode":"single"`;
+    var timing_info = `"timing":{"iterations":"3", "before":"0", "after":"20"}`
+    var text_process_name = `"monitorOptions":{"command":"${block.getFieldValue('process_name')}}"`;
     var text_variable = `"variable":"${block.getFieldValue('variable')}"`;
     var behavior_json = parseBehaviorStatements(block);
     
-    return `{${text_variable},${type_name},${text_process_name},${behavior_json}}####`;
+    return `{${text_variable},${timing_info},${type_name},${monitor_name},${mode_name},${text_process_name},${behavior_json}}####`;
 };
 
 //===============================================================================================================================
@@ -374,7 +377,7 @@ const parseBehaviorStatements = (block) => {
     {
         statements_behaviors = statements_behaviors.slice(0,-4).split('####');
         statements_behaviors.forEach((value, index) => {
-            var temp = `"${index}":${value},`;
+            var temp = `"${index+1}":${value},`;
             behavior_dict = behavior_dict.concat(temp);
         });
     }

@@ -43,12 +43,12 @@ class TabTableContainer extends React.Component {
 		rowData: [],
 		configData: [],
 		workspaceDisabled: true
-	};
+	}
 
 	constructor(props){
 		super(props);
 		this.blocklyEditor = React.createRef();
-	};
+	}
 
 	handleChange = (event, v) => {
 		this.setState({ value: v });
@@ -57,7 +57,7 @@ class TabTableContainer extends React.Component {
 	handleRowClick = (configID) => {
 		this.setState({ workspaceDisabled: false });
 		this.blocklyEditor.current.loadConfig(configID);
-	};
+	}
 
 	handleSaveButton = () => {
 		var postData = this.blocklyEditor.current.getUpdatedConfig();
@@ -68,31 +68,42 @@ class TabTableContainer extends React.Component {
 			headers: {"Content-Type": "application/json"},
 			credentials: 'same-origin'
 		})
-		.then(data => data.json())
 		.then((res) => {
-			if(res.success)
+			if(res.status === 200)
 			{
-				const { rowData, configData } = this.state;
-				
-				//update the row in the table
-				var row = rowData.find(element => element.long_id === postData.id);
-				row.name = postData.name;
-				row.vm = postData.machine;
-				row.user = postData.account.user;
-				row.count = postData.behaviors;        
+				//console.log("got 200 from update...");
+				return res.json().then((json) => {
+					if(json.success)
+					{
+						//console.log("successful update also...")
+						const { rowData, configData } = this.state;
+						
+						//update the row in the table
+						var row = rowData.find(element => element.long_id === postData.id);
+						row.name = postData.name;
+						row.vm = postData.machine;
+						row.user = postData.account.user;
+						row.count = postData.behaviors;        
 
-				var config = configData.find(element => element.id === postData.id);
-				config.json = postData.json;
-				config.xml = postData.xml;
-				
-				this.setState({ open: true, rowData, configData });
+						var config = configData.find(element => element.id === postData.id);
+						config.json = postData.json;
+						config.xml = postData.xml;
+						
+						this.setState({ open: true, rowData, configData });
+					}
+				});
+			}
+			else 
+			{
+				//reset private route state
+				this.props.onAuthFail(false);
 			}
 		});
-	};
+	}
 
 	handleClose = () => {
 		this.setState({ open: false });
-	};
+	}
 
 	addNewRow = () => {
 		const { rowData, configData } = this.state;
@@ -115,34 +126,42 @@ class TabTableContainer extends React.Component {
 				headers: {"Content-Type": "application/json"},
 				credentials: 'same-origin'
 			})
-			.then(data => data.json())
-			.then((res) => {
-				if(!res.success) this.setState({error: res.error});
-				else {
-					let newRow = { //add the new row to the table
-						id: rowData.length + 1, 
-						long_id: res.newID, 
-						name: postData.name, 
-						vm: postData.machine, 
-						user: postData.account.user, 
-						count: postData.behaviors
-					};
-					rowData.push(newRow);
+		.then((res) => {
+			if(res.status === 200)
+			{
+				return res.json().then((json) => {
+					if(json.success) {
+						let newRow = { //add the new row to the table
+							id: rowData.length + 1, 
+							long_id: res.newID, 
+							name: postData.name, 
+							vm: postData.machine, 
+							user: postData.account.user, 
+							count: postData.behaviors
+						};
+						rowData.push(newRow);
 
-					let newConfig = {
-						id: res.newID,
-						xml: postData.xml
-					};
-					configData.push(newConfig);
+						let newConfig = {
+							id: res.newID,
+							xml: postData.xml
+						};
+						configData.push(newConfig);
 
-					this.setState({ rowData, configData });
-				};
+						this.setState({ rowData, configData });
+					}
+				});
+			}
+			else 
+			{
+				//reset private route state
+				this.props.onAuthFail(false);
+			}
 		});
 	}
 
 	removeRow = () => {
 		//remove row later
-	};
+	}
 
 	componentWillMount() {
 		fetch('/api/get_automation_configs', { //read all the configs for the project
@@ -182,7 +201,7 @@ class TabTableContainer extends React.Component {
 				this.props.onAuthFail(false);
 			}
 		});
-	};
+	}
 
 	render() {
 		const { classes } = this.props;
@@ -214,7 +233,7 @@ class TabTableContainer extends React.Component {
 						onClick={this.handleSaveButton} >
 						Save Workspace
 					</Button>
-					<BlocklyEditor ref={this.blocklyEditor} configData={configData} project_id={this.state.project_id}/>
+					<BlocklyEditor ref={this.blocklyEditor} configData={configData} project_id={this.state.project_id} />
 					<Snackbar
 						anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
 						autoHideDuration={1000}
@@ -236,6 +255,6 @@ class TabTableContainer extends React.Component {
 
 TabTableContainer.propTypes = {
 	classes: PropTypes.object.isRequired,
-};
+}
 
 export default withStyles(styles)(TabTableContainer);

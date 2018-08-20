@@ -48,7 +48,7 @@ app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(logger('dev'));
-app.disable('etag');
+app.set('etag', false); //this is to prevent the server from sending 304 responses all the time
 
 // now we can set the route path & initialize the API
 router.get('/', (req, res) => {
@@ -87,7 +87,6 @@ router.get('/projects', (req,res) => {
 
 router.post('/projects', (req, res) => {
   if(req.user){
-    console.log("create new project " + req.user);
     const project = new Project();
     const { name, description } = req.body;
     if (!name || !description) {
@@ -103,13 +102,12 @@ router.post('/projects', (req, res) => {
       return res.json({ success: true, newID: entry.id });
     });
   }
-  else return res.json({ success: false, error: null});
+  else return res.status(401).json({ success: false, error: null});
 });
 
 ////////////////////////////// query info from a single project //////////////////////////////
 router.post('/projectid', (req, res) => {
   if(req.user){
-    console.log("query project " + req.user);
     const { id } = req.body;
     Project.findById(id, (err, project) => {
       if(err) return res.json({ success: false, error: err});
@@ -119,13 +117,12 @@ router.post('/projectid', (req, res) => {
       });
     });
   }
-  else return res.json({ success: false, error: null});
+  else return res.status(401).json({ success: false, error: null});
 });
 
 ////////////////////////////// query configs for a project //////////////////////////////
 router.post('/get_automation_configs', (req, res) => {
   if(req.user){
-    console.log("query all configs " + req.user);
     const { id } = req.body;
     AutomationConfig.find({'project': id}, (err, configs) => {
       if(err) return res.json({ success: false, error: err});
@@ -141,7 +138,6 @@ router.post('/get_automation_configs', (req, res) => {
 ////////////////////////////// post config for a project //////////////////////////////
 router.post('/post_new_config', (req, res) => {
   if(req.user){
-    console.log("post new config " + req.user);
     const config = new AutomationConfig();
     const { name, machine, account, project, behaviors, json, xml } = req.body;
     if (!name || !machine || !account || !project || !xml) {
@@ -162,13 +158,12 @@ router.post('/post_new_config', (req, res) => {
       return res.json({ success: true, newID: entry.id });
     });
   }
-  else return res.json({ success: false, error: null});
+  else return res.status(401).json({ success: false, error: null});
 });
 
 ////////////////////////////// query specific config //////////////////////////////
 router.post('/query_config', (req, res) => {
   if(req.user){
-    console.log("query specific config " + req.user);
     const { id } = req.body;
     AutomationConfig.findById(id, (err, config) => {
       if(err) return res.json({ success: false, error: err });
@@ -178,13 +173,13 @@ router.post('/query_config', (req, res) => {
         });
     });
   }
-  else return res.json({ success: false, error: null});
+  else return res.status(401).json({ success: false, error: null});
 });
 
 ////////////////////////////// update specific config //////////////////////////////
 router.post('/update_config', (req, res) => {
   if(req.user){
-    console.log("update specific config " + req.user);
+    //console.log("updating config ...");
     const { id, name, machine, account, project, behaviors, json, xml } = req.body;
     AutomationConfig.findById(id, (err, config) => {
       if (err) return res.json({ success: false, error: err });
@@ -207,7 +202,7 @@ router.post('/update_config', (req, res) => {
       }
     });
   }
-  else return res.json({ success: false, error: null});
+  else return res.status(401).json({ success: false, error: null});
 });
 
 ////////////////////////////// query blocks for production //////////////////////////////

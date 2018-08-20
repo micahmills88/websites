@@ -31,15 +31,24 @@ class ProjectPage extends React.Component {
             headers: {"Content-Type": "application/json"},
             credentials: 'same-origin'
         })
-        .then(data => data.json())
         .then((res) => {
-            if(!res.success) this.setState({error: res.error});
-            else {
-                this.setState({
-                    project_name:  res.data.name,
-                    project_description: res.data.description
+            if(res.status === 200)
+            {
+                return res.json().then((json) => {
+                    if(!res.success) this.setState({error: res.error});
+                    else {
+                        this.setState({
+                            project_name:  res.data.name,
+                            project_description: res.data.description
+                        });
+                    };
                 });
-            };
+            }
+            else 
+            {
+                //reset private route state
+                this.props.onAuthFail(false);
+            }
         });
     }
 
