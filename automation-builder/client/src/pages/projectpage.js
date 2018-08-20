@@ -35,11 +35,11 @@ class ProjectPage extends React.Component {
             if(res.status === 200)
             {
                 return res.json().then((json) => {
-                    if(!res.success) this.setState({error: res.error});
+                    if(!json.success) this.setState({error: json.error});
                     else {
                         this.setState({
-                            project_name:  res.data.name,
-                            project_description: res.data.description
+                            project_name:  json.data.name,
+                            project_description: json.data.description
                         });
                     };
                 });

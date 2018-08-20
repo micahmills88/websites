@@ -211,9 +211,10 @@ class TabTableContainer extends React.Component {
 			<div className={classes.root}>
 				<AppBar position="static">
 					<Tabs value={value} onChange={this.handleChange}>
-						<Tab label="Configurations" />
-						<Tab label="Personas" disabled={true} />
-						<Tab label="Machines" disabled={true} />
+						<Tab label="Behavior" />
+						<Tab label="Network" />
+						<Tab label="Web Services" />
+						<Tab label="Project Settings" />
 					</Tabs>
 				</AppBar>
 				{value === 0 && <TabContainer>
@@ -248,6 +249,7 @@ class TabTableContainer extends React.Component {
 				</TabContainer>}
 				{value === 1 && <TabContainer>Item Two</TabContainer>}
 				{value === 2 && <TabContainer>Item Three</TabContainer>}
+				{value === 3 && <TabContainer>Item Three</TabContainer>}
 			</div>
 		);
 	}
