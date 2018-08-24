@@ -36,6 +36,7 @@ class LoginPage extends React.Component {
             method: "POST",
             body: JSON.stringify({username: this.state.username, password: this.state.password}),
             headers: {"Content-Type": "application/json"},
+            credentials: 'same-origin'
         })
         .then((res) => {
             this.props.onLogin(res.status === 200);

@@ -26,7 +26,7 @@ Blockly.JavaScript['check_process_name'] = function(block) {
     var monitor_name = `"monitor":"processCheck"`;
     var mode_name = `"mode":"single"`;
     var timing_info = `"timing":{"iterations":"3", "before":"0", "after":"20"}`
-    var text_process_name = `"monitorOptions":{"command":"${block.getFieldValue('process_name')}}"`;
+    var text_process_name = `"monitorOptions":{"command":"${block.getFieldValue('process_name')}"}`;
     var text_variable = `"variable":"${block.getFieldValue('variable')}"`;
     var behavior_json = parseBehaviorStatements(block);
     

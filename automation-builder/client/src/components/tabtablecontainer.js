@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import 'whatwg-fetch';
 
+import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -12,6 +13,16 @@ import Snackbar from '@material-ui/core/Snackbar';
 
 import ConfigsTable from './configstable';
 import BlocklyEditor from './blocklyeditor';
+import DeviceTable from './devicetable';
+import VisEditor from './viseditor';
+
+const gridstyle = {
+	minWidth: 400,
+	paddingLeft: 0,
+	paddingTop: 0,
+	paddingRight: 0,
+	paddingBottom: 0,
+};
 
 function TabContainer(props) {
 	return (
@@ -224,32 +235,51 @@ class TabTableContainer extends React.Component {
 						callback={(configID) => this.handleRowClick(configID)}
 						handleAddAction={this.addNewRow}
 						handleDeleteAction={this.removeRow}
-						/>
+					/>
 					<Button 
 						disabled={workspaceDisabled} 
 						className={classes.button} 
 						variant="contained" 
 						size="large" 
 						color="secondary" 
-						onClick={this.handleSaveButton} >
+						onClick={this.handleSaveButton} 
+					>
 						Save Workspace
 					</Button>
 					<BlocklyEditor ref={this.blocklyEditor} configData={configData} project_id={this.state.project_id} />
-					<Snackbar
-						anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-						autoHideDuration={1000}
-						transitionDuration={250}
-						open={this.state.open}
-						onClose={this.handleClose}
-						ContentProps={{
-							'aria-describedby': 'message-id',
-						}}
-						message={<span id="message-id">Workspace Saved</span>}
-					/>
 				</TabContainer>}
-				{value === 1 && <TabContainer>Item Two</TabContainer>}
+				{value === 1 && <TabContainer>
+					<Grid container spacing={24} justify="flex-start" style={gridstyle}>
+						<Grid item xs={12}>
+							<DeviceTable 
+								data={rowData} 
+								tableTitle="Device Configs" 
+								callback={(configID) => this.handleRowClick(configID)}
+								handleAddAction={this.addNewRow}
+								handleDeleteAction={this.removeRow}
+							/>
+						</Grid>
+						<Grid item xs={6}>
+							<BlocklyEditor ref={this.blocklyEditor} configData={configData} project_id={this.state.project_id} />
+						</Grid>
+						<Grid item xs={6}>
+							<VisEditor />
+						</Grid>
+					</Grid>
+				</TabContainer>}
 				{value === 2 && <TabContainer>Item Three</TabContainer>}
 				{value === 3 && <TabContainer>Item Three</TabContainer>}
+				<Snackbar
+					anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+					autoHideDuration={1000}
+					transitionDuration={250}
+					open={this.state.open}
+					onClose={this.handleClose}
+					ContentProps={{
+						'aria-describedby': 'message-id',
+					}}
+					message={<span id="message-id">Workspace Saved</span>}
+				/>
 			</div>
 		);
 	}
