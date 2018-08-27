@@ -180,7 +180,7 @@ router.post('/query_config', (req, res) => {
 router.post('/update_config', (req, res) => {
   if(req.user){
     //console.log("updating config ...");
-    const { id, name, machine, account, project, behaviors, json, xml } = req.body;
+    const { id, name, machine, account, behaviors, json, xml } = req.body;
     AutomationConfig.findById(id, (err, config) => {
       if (err) return res.json({ success: false, error: err });
       if(config.xml != xml)

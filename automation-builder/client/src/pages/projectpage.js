@@ -3,7 +3,7 @@ import 'whatwg-fetch';
 
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
-import TabTableContainer from '../components/tabtablecontainer';
+import TabTableContainer from '../components/tabcontent/tabtablecontainer';
 
 const gridstyle = {
         minWidth: 400,
@@ -65,7 +65,7 @@ class ProjectPage extends React.Component {
                         </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <TabTableContainer project_id={this.state.project_id} onAuthFail={this.props.onAuthFail }/>
+                        <TabTableContainer projectID={this.state.project_id} onAuthFail={this.props.onAuthFail }/>
                     </Grid>
                 </Grid>
             </div>

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import 'whatwg-fetch';
 
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -37,27 +36,27 @@ class DataDisplayTableHead extends React.Component {
             <TableHead>
                 <TableRow>
                     {columnData.map(column => {
-                    return (
-                        <TableCell
-                        key={column.id}
-                        numeric={column.numeric}
-                        padding={column.disablePadding ? 'none' : 'default'}
-                        sortDirection={orderBy === column.id ? order : false}
-                        >
-                            <Tooltip
-                            title="Sort"
-                            placement={column.numeric ? 'bottom-end' : 'bottom-start'}
-                            enterDelay={300}
+                        return (
+                            <TableCell
+                                key={column.id}
+                                numeric={column.numeric}
+                                padding={column.disablePadding ? 'none' : 'default'}
+                                sortDirection={orderBy === column.id ? order : false}
                             >
-                                <TableSortLabel
-                                active={orderBy === column.id}
-                                direction={order}
+                                <Tooltip
+                                    title="Sort"
+                                    placement={column.numeric ? 'bottom-end' : 'bottom-start'}
+                                    enterDelay={300}
                                 >
-                                    {column.label}
-                                </TableSortLabel>
-                            </Tooltip>
-                        </TableCell>
-                    );
+                                    <TableSortLabel
+                                        active={orderBy === column.id}
+                                        direction={order}
+                                    >
+                                        {column.label}
+                                    </TableSortLabel>
+                                </Tooltip>
+                            </TableCell>
+                        );
                     }, this)}
                 </TableRow>
             </TableHead>
@@ -146,7 +145,6 @@ class DataDisplayTable extends React.Component {
             selected: [],
             page: 0,
             rowsPerPage: 5,
-            project_id: this.props.project_id,
         };
     };
 
@@ -171,84 +169,84 @@ class DataDisplayTable extends React.Component {
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
-        const { classes } = this.props;
+        const { classes, data, columnData } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
-        const data = this.props.data;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
         
         return (
-          <Paper className={classes.root}>
-            <DataDisplayTableToolbar 
-                numSelected={selected.length} 
-                tableTitle={this.props.tableTitle} 
-                onAddClick={this.props.handleAddAction}
-                onDeleteClick={this.props.handleDeleteAction}
-            />
-            <div className={classes.tableWrapper}>
-              <Table className={classes.table} aria-labelledby="tableTitle">
-                <DataDisplayTableHead
-                    columnData={this.props.columnData}
-                    numSelected={selected.length}
-                    order={order}
-                    orderBy={orderBy}
-                    onSelectAllClick={null}
-                    onRequestSort={this.handleRequestSort}
-                    rowCount={data.length}
+            <Paper className={classes.root}>
+                <DataDisplayTableToolbar 
+                    numSelected={selected.length} 
+                    tableTitle={this.props.tableTitle} 
+                    onAddClick={this.props.handleAddAction}
+                    onDeleteClick={this.props.handleDeleteAction}
                 />
-                <TableBody>
-                  {data
-                    .sort(getSorting(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map(n => {
-                      const isSelected = this.isSelected(n.id);
-                      return (
-                        <TableRow
-                          hover
-                          onClick={()=> this.handleClick(n)}
-                          role="checkbox"
-                          aria-checked={isSelected}
-                          tabIndex={-1}
-                          key={n.id}
-                          selected={isSelected}
-                        >
-                          <TableCell component="th" scope="row" padding="default">{n.name}</TableCell>
-                          <TableCell >{n.vm}</TableCell>
-                          <TableCell >{n.user}</TableCell>
-                          <TableCell numeric>{n.count}</TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 49 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-            <TablePagination
-              component="div"
-              count={data.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              backIconButtonProps={{
-                'aria-label': 'Previous Page',
-              }}
-              nextIconButtonProps={{
-                'aria-label': 'Next Page',
-              }}
-              onChangePage={this.handleChangePage}
-              onChangeRowsPerPage={this.handleChangeRowsPerPage}
-            />
-          </Paper>
+                <div className={classes.tableWrapper}>
+                    <Table className={classes.table} aria-labelledby="tableTitle">
+                        <DataDisplayTableHead
+                            columnData={columnData}
+                            numSelected={selected.length}
+                            order={order}
+                            orderBy={orderBy}
+                            onSelectAllClick={null}
+                            onRequestSort={this.handleRequestSort}
+                            rowCount={data.length}
+                        />
+                        <TableBody>
+                            {data
+                                .sort(getSorting(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map(row => {
+                                const isSelected = this.isSelected(row.id);
+                                return (
+                                    <TableRow
+                                        hover
+                                        onClick={()=> this.handleClick(row)}
+                                        role="checkbox"
+                                        aria-checked={isSelected}
+                                        tabIndex={-1}
+                                        key={row.id}
+                                        selected={isSelected}
+                                    >
+                                        {columnData.map((item) => {
+                                            return (
+                                                <TableCell key={item.id} numeric={item.numeric}>
+                                                    {row[item.kvalue]}
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                );
+                            })}
+                            {emptyRows > 0 && (
+                                <TableRow style={{ height: 49 * emptyRows }}>
+                                    <TableCell colSpan={6} />
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+                <TablePagination
+                    component="div"
+                    count={data.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    backIconButtonProps={{
+                        'aria-label': 'Previous Page',
+                    }}
+                    nextIconButtonProps={{
+                        'aria-label': 'Next Page',
+                    }}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                />
+            </Paper>
         );
-      }
     }
+}
     
-    DataDisplayTable.propTypes = {
+DataDisplayTable.propTypes = {
     classes: PropTypes.object.isRequired,
-};
-
-
+}
 
 export default withStyles(styles)(DataDisplayTable);

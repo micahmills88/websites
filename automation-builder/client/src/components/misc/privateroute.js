@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route} from 'react-router-dom';
-import LoginPage from '../pages/loginpage';
+import LoginPage from '../../pages/loginpage';
 import 'whatwg-fetch';
 
 class PrivateRoute extends React.Component {

@@ -2,14 +2,13 @@ import React from 'react';
 import 'whatwg-fetch';
 import Blockly from 'node-blockly/browser';
 
-import ToolBox from '../components/toolbox'
+import ToolBox from './toolbox'
 
 class BlocklyEditor extends React.Component {
     state = {
         workspace: null,
         config_id: "",
-        project_id: this.props.project_id,
-      };
+    };
 
 
     loadConfig = (configID) => {
@@ -44,7 +43,6 @@ class BlocklyEditor extends React.Component {
             machine: json.machine,
             account: json.account,
             behaviors: json.behaviors_count,
-            project: this.state.project_id,
             json: code,
             xml: xml_text,
         };
@@ -55,14 +53,16 @@ class BlocklyEditor extends React.Component {
         var blocks = [
             
             //{ category: 'Config', items: ['automation_config'] },
-            { category: 'Behaviors', 
+            { 
+                category: 'Behaviors', 
                 items: [
                     'behavior_execute_command', 
                     'behavior_send_email', 
                     'behavior_create_document'
                 ] 
             },
-            { category: 'Reactive',
+            { 
+                category: 'Reactive',
                 items: [
                     'check_process_name',
                     'check_process_module',
@@ -71,7 +71,8 @@ class BlocklyEditor extends React.Component {
                     'behavior_variable_text'
                 ]
             },
-            {category: 'Controls',
+            {
+                category: 'Controls',
                 items: [
                     'control_sleep',
                     'control_repeat_time',

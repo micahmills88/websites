@@ -6,7 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
-import ProjectsTable from '../components/projectstable';
+import ProjectsTable from '../components/tables/projectstable';
 import Behavior_Logo from '../images/schematic.jpg';
 
 const gridstyle = {

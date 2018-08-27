@@ -5,8 +5,8 @@ import Button from '@material-ui/core/Button';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 
-import ButtonAppBar from './components/buttonappbar';
-import PrivateRoute from './components/privateroute';
+import ButtonAppBar from './components/misc/buttonappbar';
+import PrivateRoute from './components/misc/privateroute';
 import MainPage from './pages/mainpage';
 import ProjectPage from './pages/projectpage';
 import LoginPage from './pages/loginpage';

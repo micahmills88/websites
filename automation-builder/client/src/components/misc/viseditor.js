@@ -32,7 +32,8 @@ class VisEditor extends React.Component {
             }
         };
 
-        var network = new Vis.Network(this.visdiv, data, options);
+        new Vis.Network(this.visdiv, data, options);
+
     }
 
     render = () => {
