@@ -155,7 +155,7 @@ router.post('/post_new_config', (req, res) => {
     config.xml = xml;
     config.save((err, entry) => {
       if (err) return res.json({ success: false, error: err });
-      return res.json({ success: true, newID: entry.id });
+      return res.json({ success: true, newID: entry._id });
     });
   }
   else return res.status(401).json({ success: false, error: null});

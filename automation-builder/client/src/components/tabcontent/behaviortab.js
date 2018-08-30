@@ -139,8 +139,8 @@ class BehaviorTab extends React.Component {
 				return res.json().then((json) => {
 					if(json.success) {
 						let newRow = { //add the new row to the table
-							id: rowData.length + 1, 
-							long_id: res.newID, 
+							id: rowData.length, 
+							long_id: json.newID, 
 							name: postData.name, 
 							vm: postData.machine, 
 							user: postData.account.user, 
@@ -149,7 +149,7 @@ class BehaviorTab extends React.Component {
 						rowData.push(newRow);
 
 						let newConfig = {
-							id: res.newID,
+							id: json.newID,
 							xml: postData.xml
 						};
 						configData.push(newConfig);

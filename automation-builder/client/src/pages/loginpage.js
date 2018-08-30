@@ -43,6 +43,12 @@ class LoginPage extends React.Component {
         });
     };
 
+    handleEnterKey = (e) => {
+        if(e.keyCode === 13){
+            this.handleLogin();
+        }
+    }
+
     render = () => {
         return (
             <div>
@@ -55,16 +61,20 @@ class LoginPage extends React.Component {
                                 margin="dense"
                                 id="name"
                                 label="Username"
+                                placeholder="sid@domain.local"
                                 fullWidth
                                 onChange={ this.usernameFieldUpdate }
+                                onKeyDown={ this.handleEnterKey }
                             />
                             <TextField
                                 margin="dense"
                                 id="desc"
                                 label="Password"
                                 type="password"
+                                placeholder="domain password"
                                 fullWidth
                                 onChange={ this.passwordFieldUpdate }
+                                onKeyDown={ this.handleEnterKey }
                             />
                         </CardContent>
                         <CardActions>

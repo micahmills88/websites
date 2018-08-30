@@ -196,7 +196,7 @@ class DataDisplayTable extends React.Component {
                             {data
                                 .sort(getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map(row => {
+                                .map((row, index) => {
                                 const isSelected = this.isSelected(row.id);
                                 return (
                                     <TableRow
@@ -205,12 +205,12 @@ class DataDisplayTable extends React.Component {
                                         role="checkbox"
                                         aria-checked={isSelected}
                                         tabIndex={-1}
-                                        key={row.id}
+                                        key={index}
                                         selected={isSelected}
                                     >
-                                        {columnData.map((item) => {
+                                        {columnData.map((item, i) => {
                                             return (
-                                                <TableCell key={item.id} numeric={item.numeric}>
+                                                <TableCell key={i} numeric={item.numeric}>
                                                     {row[item.kvalue]}
                                                 </TableCell>
                                             );

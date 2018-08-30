@@ -335,10 +335,10 @@ class ProjectsTable extends React.Component {
 						/>
 					</DialogContent>
 					<DialogActions>
-						<Button onClick={this.cancelClose} color="primary">
+						<Button onClick={() => this.cancelClose} color="primary">
 							Cancel
 						</Button>
-						<Button onClick={this.createClose} color="primary">
+						<Button onClick={() => this.createClose} color="primary">
 							Create
 						</Button>
 					</DialogActions>

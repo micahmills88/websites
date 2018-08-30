@@ -64,14 +64,14 @@ class TabTableContainer extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		const { value, rowData, project_id, snackbarMessage, snackbarOpen } = this.state;
+		const { value, project_id, snackbarMessage, snackbarOpen } = this.state;
 
 		return (
 			<div className={classes.root}>
 				<AppBar position="static">
 					<Tabs value={value} onChange={this.handleChange}>
 						<Tab label="Behavior" />
-						<Tab label="Network" disabled={true} />
+						<Tab label="Network" disabled={false} />
 						<Tab label="Web Services" disabled={false} />
 						<Tab label="Project Settings" disabled={true} />
 					</Tabs>
